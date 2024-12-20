@@ -80,7 +80,7 @@ if sender_email:
                     if upload_option == "Upload File (Excel/CSV)":
                         old_body = body
                         # new_body = body
-                        new_body = f"Dear Professor {name},\n" + body
+                        new_body = f"Dear Professor {name},\n\n" + body
                         
                     elif upload_option == "Companies HR List":
                         old_body = body
