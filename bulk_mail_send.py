@@ -70,8 +70,8 @@ if sender_email:
                 server.login(sender_email, password)
 
               # Send email
-for i, (name, recipient_email) in enumerate(recipients, 1):
-    try:
+      for i, (name, recipient_email) in enumerate(recipients, 1):
+     try:
         msg = MIMEMultipart()
         msg['From'] = sender_email
         msg['To'] = recipient_email
