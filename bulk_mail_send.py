@@ -63,68 +63,71 @@ if sender_email:
         uploaded_file_attach = st.file_uploader("Choose a file to attach", type=["pdf"])
 
         if st.button("CLICK TO SEND 👌") and len(recipients) > 0:
-            try:
-                # Setting up the SMTP server and login
-                server = smtplib.SMTP('smtp.gmail.com', 587)
-                server.starttls()  
-                server.login(sender_email, password)
+    try:
+        # Setting up the SMTP server and login
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(sender_email, password)
 
-              # Send email
-      for i, (name, recipient_email) in enumerate(recipients, 1):
-     try:
-        msg = MIMEMultipart()
-        msg['From'] = sender_email
-        msg['To'] = recipient_email
-        msg['Subject'] = subject
-        
-        # Personalize body for Excel/CSV uploads
-        if upload_option == "Upload File (Excel/CSV)":
-            old_body = body
-            new_body = f"Dear Professor {name},\n\n" + body
-            
-        elif upload_option == "Companies HR List":
-            old_body = body
-            new_body = f"Dear Hiring Manager,\n\n" + body
-        
-        else:
-            new_body = body
-                             
-        msg.attach(MIMEText(new_body, 'plain'))
-
-        # Improved PDF attachment handling
-        if uploaded_file_attach is not None:
+        # Send email
+        for i, (name, recipient_email) in enumerate(recipients, 1):
             try:
-                # Read the file into memory
-                pdf_bytes = uploaded_file_attach.getvalue()
-                
-                # Create a new file-like object in memory
-                pdf_file = io.BytesIO(pdf_bytes)
-                
-                # Create PDF attachment
-                part = MIMEApplication(pdf_file.read(), _subtype="pdf")
-                part.add_header('Content-Disposition', 'attachment', filename=uploaded_file_attach.name)
-                msg.attach(part)
-                
-                # Reset file pointer
-                pdf_file.seek(0)
-            except Exception as attach_error:
-                st.warning(f"Could not attach PDF for {name}: {attach_error}")
-        
-        # Send the email
-        server.sendmail(sender_email, recipient_email, msg.as_string())
-        
-        # Provide progress feedback
-        if upload_option == "Upload File (Excel/CSV)":
-            st.write(f"{i} mail sent to {name}.")
-            new_body = old_body
-        elif upload_option == "Companies HR List":
-            st.write(f"{i} mail sent.")
-            new_body = old_body
-        else:
-            st.write(f"{i} mail sent.")  
-    
-    except Exception as email_error:
-        st.error(f"Failed to send email to {recipient_email}. Error: {email_error}")
-        continue  # Skip to the next recipient
-    
-st.success("Email sending process completed!")
+                msg = MIMEMultipart()
+                msg['From'] = sender_email
+                msg['To'] = recipient_email
+                msg['Subject'] = subject
+
+                # Personalize body for Excel/CSV uploads
+                if upload_option == "Upload File (Excel/CSV)":
+                    old_body = body
+                    new_body = f"Dear Professor {name},\n\n" + body
+                elif upload_option == "Companies HR List":
+                    old_body = body
+                    new_body = f"Dear Hiring Manager,\n\n" + body
+                else:
+                    new_body = body
+
+                msg.attach(MIMEText(new_body, 'plain'))
+
+                # Improved PDF attachment handling
+                if uploaded_file_attach is not None:
+                    try:
+                        # Read the file into memory
+                        pdf_bytes = uploaded_file_attach.getvalue()
+
+                        # Create a new file-like object in memory
+                        pdf_file = io.BytesIO(pdf_bytes)
+
+                        # Create PDF attachment
+                        part = MIMEApplication(pdf_file.read(), _subtype="pdf")
+                        part.add_header('Content-Disposition', 'attachment', filename=uploaded_file_attach.name)
+                        msg.attach(part)
+
+                        # Reset file pointer
+                        pdf_file.seek(0)
+                    except Exception as attach_error:
+                        st.warning(f"Could not attach PDF for {name}: {attach_error}")
+
+                # Send the email
+                server.sendmail(sender_email, recipient_email, msg.as_string())
+
+                # Provide progress feedback
+                if upload_option == "Upload File (Excel/CSV)":
+                    st.write(f"{i} mail sent to {name}.")
+                    new_body = old_body
+                elif upload_option == "Companies HR List":
+                    st.write(f"{i} mail sent.")
+                    new_body = old_body
+                else:
+                    st.write(f"{i} mail sent.")
+
+            except Exception as email_error:
+                st.error(f"Failed to send email to {recipient_email}. Error: {email_error}")
+                continue  # Skip to the next recipient
+
+        st.success("Email sending process completed!")
+
+    except Exception as e:
+        st.error(f"Error: {e}")
+    finally:
+        server.quit()
