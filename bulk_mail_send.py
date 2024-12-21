@@ -63,11 +63,11 @@ if sender_email:
         uploaded_file_attach = st.file_uploader("Choose a file to attach", type=["pdf"])
 
         if st.button("CLICK TO SEND 👌") and len(recipients) > 0:
-    try:
+            try:
         # Setting up the SMTP server and login
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls()
-        server.login(sender_email, password)
+                server = smtplib.SMTP('smtp.gmail.com', 587)
+                server.starttls()
+                server.login(sender_email, password)
 
         # Send email
         for i, (name, recipient_email) in enumerate(recipients, 1):
