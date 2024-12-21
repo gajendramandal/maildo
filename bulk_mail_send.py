@@ -80,7 +80,7 @@ if sender_email:
 
                         # Personalize body for different upload options
                         if upload_option == "Upload File (Excel/CSV)":
-                            new_body = f"Dear {name},\n\n" + body
+                            new_body = f"Dear Professor {name},\n\n" + body
                         elif upload_option == "Companies HR List":
                             new_body = f"Dear Hiring Manager,\n\n" + body
                         else:
