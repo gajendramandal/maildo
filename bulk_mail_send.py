@@ -80,7 +80,7 @@ if sender_email:
 
                         # Personalize body for different upload options
                         if upload_option == "Upload File (Excel/CSV)":
-                            new_body = f"Dear Professor {name},\n\n" + body
+                            new_body = f"Dear {name},\n\n" + body
                         elif upload_option == "Companies HR List":
                             new_body = f"Dear Hiring Manager,\n\n" + body
                         else:
@@ -101,9 +101,12 @@ if sender_email:
                         # Send the email
                         server.sendmail(sender_email, recipient_email, msg.as_string())
                         st.write(f"{i} mail sent to {recipient_email}.")
-                    except Exception as email_error:
+                    except smtplib.SMTPRecipientsRefused:
+                        st.warning(f"Invalid email address: {recipient_email}. Skipping...")
+                    except smtplib.SMTPException as email_error:
                         st.error(f"Failed to send email to {recipient_email}. Error: {email_error}")
-                        continue
+                    except Exception as unexpected_error:
+                        st.error(f"Unexpected error for {recipient_email}: {unexpected_error}")
 
                 st.success("Email sending process completed!")
             except Exception as e:
