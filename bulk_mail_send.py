@@ -6,7 +6,7 @@ import pandas as pd
 import streamlit as st
 import io
 
-st.title("Automatic/Bulk Email Sender")
+st.title("Automatic Email Sender PRO")
 
 # Input sender email and password
 sender_email = st.text_input("Enter your Email address ")
