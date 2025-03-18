@@ -76,7 +76,6 @@ To run this app locally:
 ---
 
 ## Acknowledgments
-Special thanks to Baibhav for providing the IIT email list used in this project.
 
 ---
 
